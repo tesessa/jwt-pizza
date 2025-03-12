@@ -58,8 +58,8 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     environment:
-      name: production
-      url: https://pizza.tesessa.click
+      name: staging
+      url: https://stage-pizza.tesessa.click
     env:
       version: ${{needs.build.outputs.version}}
     steps:
