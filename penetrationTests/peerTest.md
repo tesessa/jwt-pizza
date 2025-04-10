@@ -22,7 +22,7 @@ If the attack had succeeded it would have been a severity 1 because I could have
 | Item           | Result                                                                         |
 | -------------- | ------------------------------------------------------------------------------ |
 | Date           | April 9, 2025                                                                  |
-| Target         | pizza.byucsstudent.click                                                       |
+| Target         | https://pizza-service.tesessa.click                                             |
 | Classification | Injection                                                                      |
 | Severity       | 1                                                                              |
 | Description    | SQL injection failed                                                           |  
@@ -33,5 +33,29 @@ or delete all the franchises and stores. You could also use it to update all the
 But I went and used the update user endpoint to udpate the admin user so my partner couldn't access it.
 
 ## Lylah Liu
+
+| Item           | Result                                                                         |
+| -------------- | ------------------------------------------------------------------------------ |
+| Date           | April 10, 2025                                                                  |
+| Target         | https://pizza-service.editnails260.click                                                    |
+| Classification | Injection                                                                      |
+| Severity       | 1                                                                              |
+| Description    | SQL injection failed                                                           |  
+| Corrections    | Use Parameters to sanitize user inputs.                                                          |
+
+A SQL injection vulnerability was discovered in the updateUser function of database.js. 
+The function was directly interpolating user inputs into a SQL query, exposing the system to injection risks.
+```console
+curl -X PUT https://pizza-service.editnails260.click/api/auth/1 \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IuW4uOeUqOWQjeWtlyIsImVtYWlsIjoiYWRtaW5Aand0LmNvbSIsInJvbGVzIjpbeyJyb2xlIjoiYWRtaW4ifV0sImlhdCI6MTc0NDMwMjI5NH0.OTZCjyJXvBYIAU1wynjRBr-wfHhnNnmEvvw5t5Ssz78" \
+-d '{"email": "hacker.jwt.com\', name=\'admin\' --"}'
+```
+The bearer token was obtained via the browser’s inspection tab upon login. The injection attempts to elevate privileges by changing the user's role to admin.
+```sql
+UPDATE user SET email='test@example.com', name='admin'
+```
+
+I updated the updateUser function to use parameterized queries. This prevents SQL injection by ensuring user inputs are treated as data, not executable code.
+
 
 
