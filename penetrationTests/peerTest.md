@@ -21,7 +21,7 @@ If the attack had succeeded it would have been a severity 1 because I could have
 
 | Item           | Result                                                                         |
 | -------------- | ------------------------------------------------------------------------------ |
-| Date           | June 18, 2053                                                                  |
+| Date           | April 9, 2025                                                                  |
 | Target         | pizza.byucsstudent.click                                                       |
 | Classification | Injection                                                                      |
 | Severity       | 1                                                                              |
