@@ -79,5 +79,30 @@ curl -X DELETE $host/api/franchise/1 -H "Authorization: Bearer $token"
 ```
 This added one item to the menu and deleted a franchise, here is a screenshot of the result
 ![Penetrationtest](penetrationTestingTessa.png)
-
 This attack could lead to the attacker deleting all the franchises and updating all the users which could be a problem with in the code
+
+## Lylah's attack on Tessa
+
+| Item           | Result                                                                         |
+| -------------- | ------------------------------------------------------------------------------ |
+| Date           |Apri 10 2025                                                                 |
+| Target         | https://pizza.tesessa.click/menu                                                    |
+| Classification | Broken Access Control                                                                      |
+| Severity       | 2                                                                              |
+| Description    | Unauthorized access to administrative functionality               |
+| Images         | ![PenetrationTest](peerTestLylahToTessa.png) added menu item |
+| Corrections    | Enforce strong admin credentials and prevent bearer token exposure                                                     |
+
+The admin account used a weak password (admin), which was easily guessed.
+After logging in with the weak credentials, the admin’s authorization token was exposed in the browser's inspection tab.
+Using the stolen token, I executed a PUT request to the admin-only menu update endpoint:
+```console
+curl -X PUT https://pizza-service.tesessa.click/api/order/menu
+-H 'Content-Type: application/json'
+-d '{ "title":"Students", "description": "No topping, no sauce, just carbs", "image":"pizza9.png", "price": 0.0001 }'
+-H 'Authorization: Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IuW4uOeUqOWQjeWtlyIsImVtYWlsIjoiYWRtaW5Aand0LmNvbSIsInJvbGVzIjpbeyJyb2xlIjoiYWRtaW4ifV0sImlhdCI6MTc0NDMwMjI5NH0.OTZCjyJXvBYIAU1wynjRBr-wfHhnNnmEvvw5t5Ssz78'
+```
+## summary:
+- Do not use default or weak passwords for admin accounts.
+- Never expose bearer tokens or sensitive data in client-side JavaScript or browser tools.
+- Enforce role-based access control on sensitive endpoints, sanitize sql queries.
